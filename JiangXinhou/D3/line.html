@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html> 
+<head> 
+  <meta charset="utf-8"> 
+  <title>Line</title>
+
+  <style>
+  .axis path,
+  .axis line {
+    fill: none;
+    stroke: black;
+    shape-rendering: crispEdges;
+  }
+
+  .axis text {
+    font-family: sans-serif;
+    font-size: 11px;
+  }
+  </style>
+</head>
+
+<body>
+  <script src="https://d3js.org/d3.v3.min.js"></script>
+  
+  <script>
+  // 数据定义
+  var size = {width:500, height:400};
+  var margin = {left:50, top:30, right:50, bottom:50};
+  var Swidth = size.width + margin.left;
+  var Sheight = size.height + margin.top;
+  // 数据缓冲
+  var x = [2005,2006,2007,2008,2009,2010,2011,2012,2013,2014];
+  var y = [23413,45324,16932,32157,12311,10232,7896,8314,21032,84321];
+  var Data = [];
+
+  // 添加svg元素
+  var svg = d3.select("body")
+              .append("svg")
+              .attr("width",Swidth + margin.right)
+              .attr("height",Sheight + margin.bottom);
+
+  // 颜色
+  var color = d3.scale.category10();
+  // 数据读取
+  d3.tsv("test.txt", function(d){
+    Data.push(d);
+    //console.log(d);
+    return{
+      a:+d.a,
+      b:+d.b,
+      d:+d.d,
+      c:+d.c,
+      e:+d.e,
+      f:+d.f,
+      g:+d.g,
+      h:+d.h,
+      i:+d.i,
+      j:+d.j
+    }
+
+  },function(error, data){
+    console.log(data);
+    // 比例尺
+    var scaleX = d3.scale.linear()
+                         .domain([2005,2014])
+                         .range([0,size.width]);
+    var scaleY = d3.scale.linear()
+                         .domain([0,50000])
+                         .range([size.height,0]);
+    // 坐标轴
+    var axisX = d3.svg.axis()
+                      .scale(scaleX)
+                      .orient("bottom")
+                      .ticks(x.length);
+    svg.append("g")
+        .attr("class","axis")
+        .attr("transform","translate("+margin.left+","+Sheight+")")
+        .call(axisX)
+        .append("text")
+        .text("years")
+        .attr("transform","translate("+size.width+","+"0)");
+    var axisY = d3.svg.axis()
+                      .scale(scaleY)
+                      .orient("left")
+                      .ticks(y.length);
+    svg.append("g")
+       .attr("class","axis")
+       .attr("transform","translate("+margin.left+","+margin.top+")")
+       .call(axisY)
+       .append("text")
+       .text("data");
+
+    // 折线图
+    // A
+    var lineA = d3.svg.line()
+                     .x(function(d,i) { return scaleX(2005+i); })
+                     .y(function(d,i) { return scaleY(d.a); })
+                     .interpolate('linear');
+    var path = svg.append('path')
+                  .attr('class', 'line')
+                  .attr('transform','translate('+margin.left+','+margin.top+')')
+                  .attr('d', lineA(data))
+                  .attr('stroke','red')
+                  .attr('stroke-width',2)
+                  .attr('fill','none');
+
+    // B
+    var lineB = d3.svg.line()
+                     .x(function(d,i) { return scaleX(2005+i); })
+                     .y(function(d,i) { return scaleY(d.b); })
+                     .interpolate('linear');
+    var path = svg.append('path')
+                  .attr('class', 'line')
+                  .attr('transform','translate('+margin.left+','+margin.top+')')
+                  .attr('d', lineB(data))
+                  .attr('stroke','blue')
+                  .attr('stroke-width',2)
+                  .attr('fill','none');
+    // C
+    var lineC = d3.svg.line()
+                     .x(function(d,i) { return scaleX(2005+i); })
+                     .y(function(d,i) { return scaleY(d.c); })
+                     .interpolate('linear');
+    var path = svg.append('path')
+                  .attr('class', 'line')
+                  .attr('transform','translate('+margin.left+','+margin.top+')')
+                  .attr('d', lineC(data))
+                  .attr('stroke','orange')
+                  .attr('stroke-width',2)
+                  .attr('fill','none');
+    // D
+    var lineD = d3.svg.line()
+                     .x(function(d,i) { return scaleX(2005+i); })
+                     .y(function(d,i) { return scaleY(d.d); })
+                     .interpolate('linear');
+    var path = svg.append('path')
+                  .attr('class', 'line')
+                  .attr('transform','translate('+margin.left+','+margin.top+')')
+                  .attr('d', lineD(data))
+                  .attr('stroke','orange')
+                  .attr('stroke-width',2)
+                  .attr('fill','none');
+    // E
+    var lineE = d3.svg.line()
+                     .x(function(d,i) { return scaleX(2005+i); })
+                     .y(function(d,i) { return scaleY(d.e); })
+                     .interpolate('linear');
+    var path = svg.append('path')
+                  .attr('class', 'line')
+                  .attr('transform','translate('+margin.left+','+margin.top+')')
+                  .attr('d', lineE(data))
+                  .attr('stroke','black')
+                  .attr('stroke-width',2)
+                  .attr('fill','none');
+    // F
+    var lineF = d3.svg.line()
+                     .x(function(d,i) { return scaleX(2005+i); })
+                     .y(function(d,i) { return scaleY(d.f); })
+                     .interpolate('linear');
+    var path = svg.append('path')
+                  .attr('class', 'line')
+                  .attr('transform','translate('+margin.left+','+margin.top+')')
+                  .attr('d', lineF(data))
+                  .attr('stroke','pink')
+                  .attr('stroke-width',2)
+                  .attr('fill','none');
+    // G
+    var lineG = d3.svg.line()
+                     .x(function(d,i) { return scaleX(2005+i); })
+                     .y(function(d,i) { return scaleY(d.g); })
+                     .interpolate('purple');
+    var path = svg.append('path')
+                  .attr('class', 'line')
+                  .attr('transform','translate('+margin.left+','+margin.top+')')
+                  .attr('d', lineG(data))
+                  .attr('stroke','green')
+                  .attr('stroke-width',2)
+                  .attr('fill','none');
+    // H
+    var lineH = d3.svg.line()
+                     .x(function(d,i) { return scaleX(2005+i); })
+                     .y(function(d,i) { return scaleY(d.h); })
+                     .interpolate('linear');
+    var path = svg.append('path')
+                  .attr('class', 'line')
+                  .attr('transform','translate('+margin.left+','+margin.top+')')
+                  .attr('d', lineH(data))
+                  .attr('stroke','yellow')
+                  .attr('stroke-width',2)
+                  .attr('fill','none');
+    // I
+    var lineI = d3.svg.line()
+                     .x(function(d,i) { return scaleX(2005+i); })
+                     .y(function(d,i) { return scaleY(d.i); })
+                     .interpolate('linear');
+    var path = svg.append('path')
+                  .attr('class', 'line')
+                  .attr('transform','translate('+margin.left+','+margin.top+')')
+                  .attr('d', lineI(data))
+                  .attr('stroke','blue')
+                  .attr('stroke-width',2)
+                  .attr('fill','none');
+    // J
+    var lineJ = d3.svg.line()
+                     .x(function(d,i) { return scaleX(2005+i); })
+                     .y(function(d,i) { return scaleY(d.j); })
+                     .interpolate('linear');
+    var path = svg.append('path')
+                  .attr('class', 'line')
+                  .attr('transform','translate('+margin.left+','+margin.top+')')
+                  .attr('d', lineJ(data))
+                  .attr('stroke','red')
+                  .attr('stroke-width',2)
+                  .attr('fill','none');
+
+  });
+
+
+  </script>
+
+</body>
+</html>

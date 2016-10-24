@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html> 
+<head> 
+  <meta charset="utf-8"> 
+  <title>PieChart</title>
+
+  <style>
+  </style>
+</head>
+
+<body>
+  <script src="https://d3js.org/d3.v3.min.js"></script>
+  
+  <script>
+  // 数据定义
+  var width = 400;
+  var height = 400;
+  var dataset = [];
+
+  // 添加svg元素
+  var svg = d3.select("body")
+              .append("svg")
+              .attr("width",width)
+              .attr("height",height);
+  // 饼图布局
+  var pie = d3.layout.pie();
+  // 饼图内外半径
+  var innerR = 0;
+  var outerR = 150;
+  var arc = d3.svg.arc()
+                  .innerRadius(innerR)
+                  .outerRadius(outerR);
+
+  // 颜色
+  var color = d3.scale.category10();
+
+
+  // 数据读取
+  d3.tsv("test.txt", function(d){
+    dataset.push(d.data);
+    console.log("name:"+d.name);
+    console.log("data:"+d.data);
+
+  },function(error,data){
+    if (error) throw error;
+    console.log("dataset:"+dataset);
+    // 数据
+    var piedata = pie(dataset);
+
+  // 添加数据和元素
+  var arcs = svg.selectAll("g")
+                .data(piedata)
+                .enter()
+                .append("g")
+                .attr("transform","translate(" + (width/2) + "," + (width/2) + ")");
+                
+  // 添加交互事件
+  arcs.on("click", function(d){
+    alert(d.data);
+  });
+
+  // 添加path
+  arcs.append("path")
+      .attr("fill", function(d,i){
+        return color(i);
+      })
+      .attr("d", function(d,i){
+        return arc(d);
+      })
+      .on("mouseover",function(d,i){
+        d3.select(this).attr("fill", "yellow");
+      })
+      .on("mouseout",function(d,i){
+        d3.select(this).attr("fill",color(i));
+      });
+
+  // 添加文本
+  arcs.append("text")
+      .attr("transform",function(d){
+        return "translate(" + arc.centroid(d) + ")";
+      })
+      .attr("text-anchor","middle")
+      .text(function(d){
+        return d.data;
+      });
+
+  });
+
+
+  </script>
+
+</body>
+</html>
