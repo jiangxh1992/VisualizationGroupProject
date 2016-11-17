@@ -31,13 +31,13 @@
 
   /* 提示框样式 */
   #tips_text {
-  	 font-family: simsun;
+   font-family: simsun;
 	 font-size: 14px;
 	 width: 120;
 	 height: 50;
 	 position: absolute;
 	 text-align: center;
-     border-style: dotted; 
+   border-style: dotted; 
 	 border-width: 1px;
 	 background-color: #F0D6BD;
 	 border-radius: 2px;
@@ -394,7 +394,7 @@
                   			     .style("opacity",1.0)
                              .html(d); // 显示数据
                   })
-                  .on("mosemove", function(){
+                  .on("mousemove", function(){
                   	tips_text.style("left",d3.event.pageX + "px")
                   			     .style("top",(d3.event.pageY+20) + "px");
                   })

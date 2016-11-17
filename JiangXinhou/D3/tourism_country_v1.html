@@ -2,34 +2,34 @@
 <html> 
 <head> 
   <meta charset="utf-8"> 
-  <title>ä¸åŒå›½å®¶å…¥å¢ƒæ¸¸å®¢</title>
+  <title>Tourists From Different Countries</title>
 
   <style>
   body{
     margin: 0;
-    background: #0E2528; /*èƒŒæ™¯è‰²*/
+    background: #0E2528; /*±³¾°É«*/
   }
-  /* æ ‡é¢˜ */
+  /* ±êÌâ */
   #title{
     color: #F1DCD1;
     font-family:Verdana;
   }
 
-  /* åæ ‡è½´æ ·å¼ */
+  /* ×ø±êÖáÑùÊ½ */
   .axis path, .axis line{
     fill: none;
     stroke: white;
     shape-rendering: crispEdges;
   }
 
-  /* åæ ‡è½´æ–‡å­—æ ·å¼ */
+  /* ×ø±êÖáÎÄ×ÖÑùÊ½ */
   .axis text{
     font-family: Verdana;
     font-size: 11px;
     fill: white;
   }
 
-  /* æç¤ºæ¡†æ ·å¼ */
+  /* ÌáÊ¾¿òÑùÊ½ */
   #tips_text {
   	 font-family: simsun;
 	 font-size: 14px;
@@ -43,14 +43,14 @@
 	 border-radius: 2px;
   }
 
-  /* å›¾ä¾‹ */
+  /* Í¼Àı */
   .statement {
   }
   .statement:hover {
   	stroke: #FFF;
   }
 
-  /* æŠ˜çº¿æ ·å¼ */
+  /* ÕÛÏßÑùÊ½ */
   .line{
     stroke-width:3;
     fill: none;
@@ -59,14 +59,14 @@
   	stroke: #73FCCF;
   }
 
-  /* æŠ˜çº¿ä¸Šçš„ç‚¹ */
+  /* ÕÛÏßÉÏµÄµã */
   .linecircle{
   }
   .linecircle:hover{
   	fill: #BFFF09;
   }
 
-  /* æŸ±çŠ¶å›¾æ ·å¼ */
+  /* Öù×´Í¼ÑùÊ½ */
   .bar{
     }
   .bar:hover{
@@ -78,56 +78,58 @@
 </head>
 
 <body>
-<h3 id="title">ä¸åŒå›½å®¶å…¥å¢ƒæ¸¸å®¢</h3>>
+<h3 id="title">Tourists From Different Countries</h3>>
 
   <script src="https://d3js.org/d3.v3.min.js"></script>
 
   <script>
-  /***************************************************** æ•°æ®å®šä¹‰ *************************************************************/
-  var size = {width:1000, height:500};                  // çº¿å›¾ä¸ŠåŠéƒ¨åˆ†çš„å°ºå¯¸
-  var margin = {left:50, top:40, right:80, bottom:50};  // è¾¹ç•Œç©ºé—´
-  var Swidth = size.width + margin.left;                // svgçš„å®½åº¦
-  var Sheight = size.height + margin.top;               // svgçš„é«˜åº¦
-  
-  // å›¾ä¾‹æ•°æ®
-  var dataTitles = ["å°åº¦","å°åº¦å°¼è¥¿äºš","æ—¥æœ¬","é©¬æ¥è¥¿äºš","è²å¾‹å®¾","æ–°åŠ å¡","éŸ©å›½","æ³°å›½","è‹±å›½","å¾·å›½","æ³•å›½","æ„å¤§åˆ©","è·å…°","è‘¡è„ç‰™","ç‘å…¸","ç‘å£«","ä¿„ç½—æ–¯","åŠ æ‹¿å¤§","ç¾å›½","æ¾³å¤§åˆ©äºš","æ–°è¥¿å…°"];
-  // æ¨ªè½´åæ ‡
+  /***************************************************** Êı¾İ¶¨Òå *************************************************************/
+  var size = {width:1000, height:500};                  // ÏßÍ¼ÉÏ°ë²¿·ÖµÄ³ß´ç
+  var margin = {left:50, top:40, right:80, bottom:50};  // ±ß½ç¿Õ¼ä
+  var Swidth = size.width + margin.left;                // svgµÄ¿í¶È
+  var Sheight = size.height + margin.top;               // svgµÄ¸ß¶È
+  // Í¼ÀıÊı¾İ
+  var dataTitles = ["Japan","Malaysia","Philippines","Singapore","Korea","Thailand","British","Germany","France","Italy","Netherlands","Russia","Canada","America","Australia","NewZealand"];
+  // Í¼Æ¬µØÖ·
+  var imageData = ["japan.png","malaysia.png","philippines.png","singapore.png","korea.png","thailand.png","uk.png","germany.png","france.png","italy.png","netherlands.png","russia.png","canada.png","us.png","australia.png","newzealand.png"];
+  // ºáÖá×ø±ê
   var x = [2005,2006,2007,2008,2009,2010,2011,2012,2013,2014];
-  // xè½´tick
+  // xÖátick
   var xTick = "YEAR"
-  // yè½´æ•°æ®ä¸Šé™
+  // yÖáÊı¾İÉÏÏŞ
   var yMax = 500;
-  // yè½´tick
+  // yÖátick
   var yTick = "Ten Thousand People"
-  // æŸ±çŠ¶å›¾å®½åº¦
+  // Öù×´Í¼¿í¶È
   var barWidth = 10;
-  // çº¿å›¾åˆå§‹çš„é‚£æ¡
+  // ÏßÍ¼³õÊ¼µÄÄÇÌõ
   var initIndex = 0;
-  // åœ†ç‚¹åŠå¾„
+  // Ô²µã°ë¾¶
   var radius = 5;
-  // å›¾ä¾‹ä¹‹é—´é—´è·
+  // Í¼ÀıÖ®¼ä¼ä¾à
   var stateD = 20;
 
-  // æ•°æ®ç¼“å†²
+  // Êı¾İ»º³å
   var Data = [];
   var sumData = [0,0,0,0,0,0,0,0,0,0];
-  var indexs = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20];
-  // æŸ±çŠ¶å›¾æ•°ç»„
+  var indexs = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15];
+  // Öù×´Í¼Êı×é
   var Bars = [];
 
-  // é¢œè‰²
-  var color = [d3.rgb(244,189,130),d3.rgb(82,158,63),d3.rgb(168,221,146),d3.rgb(197,58,50),d3.rgb(59,117,175),d3.rgb(179,199,229),d3.rgb(239,134,54),d3.rgb(244,189,130),d3.rgb(82,158,63),d3.rgb(168,221,146),d3.rgb(197,58,50),d3.rgb(59,117,175),d3.rgb(179,199,229),d3.rgb(239,134,54),d3.rgb(244,189,130),d3.rgb(82,158,63),d3.rgb(168,221,146),d3.rgb(197,58,50),d3.rgb(59,117,175),d3.rgb(179,199,229),d3.rgb(239,134,54)];
+  // ÑÕÉ«
+  var color = d3.scale.category20b();
+  //var color = [d3.rgb(244,189,130),d3.rgb(82,158,63),d3.rgb(168,221,146),d3.rgb(197,58,50),d3.rgb(59,117,175),d3.rgb(179,199,229),d3.rgb(239,134,54),d3.rgb(244,189,130),d3.rgb(82,158,63),d3.rgb(168,221,146),d3.rgb(197,58,50),d3.rgb(59,117,175),d3.rgb(179,199,229),d3.rgb(239,134,54),d3.rgb(244,189,130),d3.rgb(82,158,63),d3.rgb(168,221,146),d3.rgb(197,58,50),d3.rgb(59,117,175),d3.rgb(179,199,229),d3.rgb(239,134,54)];
 
-  // æ·»åŠ svg
+  // Ìí¼Ósvg
   var svg = d3.select("body")
               .append("svg")
               .attr('class','svg')
-              .attr("width",Swidth + margin.right)
-              .attr("height",2*Sheight + margin.bottom);
+              .attr("width",Swidth+margin.right)
+              .attr("height",Sheight+margin.bottom);
 
-  /****************************************************** æ•°æ®è¯»å– *************************************************************/
+  /****************************************************** Êı¾İ¶ÁÈ¡ *************************************************************/
   d3.tsv("country.txt", function(d){
-    // å°†ä¸€ç»„ç»„åå¹´æ•°æ®pushåˆ°æ•°æ®ç¼“å†²
+    // ½«Ò»×é×éÊ®ÄêÊı¾İpushµ½Êı¾İ»º³å
     var groupData = [];
     groupData.push(+d.a);
     groupData.push(+d.b);
@@ -142,7 +144,7 @@
     Data.push(groupData);
     console.log(groupData);
 
-    // æ¯æ¬¡è¿”å›ä¸€ç»„åå¹´çš„æ•°æ®(è¿™é‡Œç”¨ä¸åˆ°)
+    // Ã¿´Î·µ»ØÒ»×éÊ®ÄêµÄÊı¾İ(ÕâÀïÓÃ²»µ½)
     return{
       a:+d.a,
       b:+d.b,
@@ -158,33 +160,33 @@
 
   },function(error, data){
 
-    // è¿”å›ä¸€ä¸ªå¯¹è±¡æ•°ç»„ï¼Œæ¯ä¸ªå¯¹è±¡æœ‰åå¹´ä¸­æ¯å¹´çš„ä¸€ä¸ªæ•°æ®
+    // ·µ»ØÒ»¸ö¶ÔÏóÊı×é£¬Ã¿¸ö¶ÔÏóÓĞÊ®ÄêÖĞÃ¿ÄêµÄÒ»¸öÊı¾İ
     console.log(Data);
 
-    /**************************************************** æ¯”ä¾‹å°º ****************************************************************/
+    /**************************************************** ±ÈÀı³ß ****************************************************************/
 
     var scaleX = d3.scale.linear()
-                         .domain([2005,2014])    // æ•°æ®èŒƒå›´
-                         .range([0,size.width]); // ç•Œé¢å°ºå¯¸èŒƒå›´
+                         .domain([2005,2014])    // Êı¾İ·¶Î§
+                         .range([0,size.width]); // ½çÃæ³ß´ç·¶Î§
     var scaleY = d3.scale.linear()
                          .domain([0,yMax])
                          .range([size.height,0]);
     var scaleY2 = d3.scale.linear()
                          .domain([0,yMax])
                          .range([0,size.height]);
-    // é€†æ¯”ä¾‹å°º
+    // Äæ±ÈÀı³ß
     var reverseY = d3.scale.linear()
     					   .domain([size.height,0])
     					   .range([0,yMax]);
 
-    /****************************************************** åæ ‡è½´ **************************************************************/
+    /****************************************************** ×ø±êÖá **************************************************************/
 
-    // 1.å®šä¹‰æ¨ªè½´
+    // 1.¶¨ÒåºáÖá
     var axisX = d3.svg.axis()
                       .scale(scaleX)
                       .orient("top")
-                      .ticks(x.length+1); // æ ‡æ³¨ä¸ªæ•°
-    // è°ƒæ•´æ¨ªä½ç½®å¹¶æ·»åŠ æ¨ªè½´æ ‡ç­¾
+                      .ticks(x.length+1); // ±ê×¢¸öÊı
+    // µ÷ÕûºáÎ»ÖÃ²¢Ìí¼ÓºáÖá±êÇ©
     svg.append("g")
         .attr("class","axis")
         .attr("transform","translate("+margin.left+","+Sheight+")")
@@ -193,11 +195,11 @@
         .text(xTick)
         .attr("transform","translate("+(size.width+35)+","+"0)");
 
-    // 2.å®šä¹‰çºµè½´
+    // 2.¶¨Òå×İÖá
     var axisY = d3.svg.axis()
                       .scale(scaleY)
                       .orient("left")
-                      .ticks(10); // æ ‡æ³¨ä¸ªæ•°
+                      .ticks(10); // ±ê×¢¸öÊı
     svg.append("g")
        .attr("class","axis")
        .attr("transform","translate("+margin.left+","+(margin.top)+")")
@@ -205,125 +207,127 @@
        .append("text")
        .text(yTick);
 
-    // var axisY2 = d3.svg.axis()
-    //                   .scale(scaleY2)
-    //                   .orient("left")
-    //                   .ticks(10); // æ ‡æ³¨ä¸ªæ•°
-    // svg.append("g")
-    //    .attr("class","axis")
-    //    .attr("transform","translate("+margin.left+","+Sheight+")")
-    //    .call(axisY2)
-    //    .append("text")
-    //    .attr("transform","translate("+0+","+(size.height+10)+")")
-    //    .text(yTick);
+    /*********************************************** Öù×´Í¼¡¢ÕÛÏßÍ¼ **************************************************************/
 
-    /*********************************************** æŸ±çŠ¶å›¾ã€æŠ˜çº¿å›¾ **************************************************************/
+    /*************** 0.»æÖÆ¹ú¼ÒµØÍ¼µØÍ¼ ***************/
+    var map = svg.selectAll("map")
+               .data(imageData[initIndex])
+               .enter()
+               .append("image")
+               .attr("x",size.width-500)
+               .attr("y",0)
+               .attr("width", 500)
+               .attr("height", 300)
+               .attr("opacity", 0.4)
+               .attr("xlink:href",imageData[initIndex]);
 
-    /*************** 1.æ–‡å­—æ ‡ç­¾ ***************/
+    /*************** 1.ÎÄ×Ö±êÇ© ***************/
     var tips_text;
     tips_text = d3.select("body")
   				 .append('div')
   				 .attr("id", "tips_text")
   				 .style("opacity",0.0);
 
-  	/*************** 2.ç»˜åˆ¶å›¾ä¾‹ ***************/
+  	/*************** 2.»æÖÆÍ¼Àı ***************/
   	var statement = svg.selectAll("statement")
   						.data(indexs)
   						.enter()
   						.append("rect")
   						.attr("class", "statement")
   						.attr('transform','translate('+(margin.left)+','+0+')')
-  						.attr("fill", function(d,i){return color[i];})
+  						.attr("fill", function(d,i){return color(i);})
   						.attr("x", function(d,i) { return i*stateD; })
           		.attr("y", 0)
           		.attr("width", 15)
           		.attr("height",15)
           		.style("font-size", 20)
               .on("mouseover", function(d, i){
-                // é‡ç»˜
+                // ÖØ»æ
                 mouseoverAmi(i);
-                // æ˜¾ç¤ºæ ‡ç­¾
+                // ÏÔÊ¾±êÇ©
                 tips_text.style("left",d3.event.pageX + "px")
                           .style("top",(d3.event.pageY+20) + "px")
                           .style("opacity",1.0)
-                          .html(dataTitles[d]); // æ˜¾ç¤ºæ•°æ®
+                          .html(dataTitles[d]); // ÏÔÊ¾Êı¾İ
               })
               .on("mosemove", function(){
                 tips_text.style("left",d3.event.pageX + "px")
                          .style("top",(d3.event.pageY+20) + "px");
               })
               .on("mouseout", function(d,i){
-                  // æ¢å¤
+                  // »Ö¸´
                   mouseoutAmi(i);
-                  // ç§»é™¤æ ‡ç­¾
+                  // ÒÆ³ı±êÇ©
                   tips_text.style("opacity", 0.0);
               });
 
-    /*************** 3.ç»˜åˆ¶çº¿å›¾ ***************/
-    // æŠ˜çº¿å‡½æ•°,åæ ‡æ˜ å°„
+    /*************** 3.»æÖÆÏßÍ¼ ***************/
+    // ÕÛÏßº¯Êı,×ø±êÓ³Éä
     var line = d3.svg.line()
                      .x(function(d,i) { return scaleX(2005+i); })
                      .y(function(d,i) { return scaleY(d); })
-                     .interpolate('monotone'); // linearï¼Œstep-after
+                     .interpolate('monotone'); // linear£¬step-after
 
-    // ç»˜åˆ¶å½“å‰æŠ˜çº¿
+    // »æÖÆµ±Ç°ÕÛÏß
     var linepath = svg.append('path')
                     .attr('class', 'line')
                     .attr('transform','translate('+margin.left+','+margin.top+')')
-                    .attr('stroke', color[initIndex])
+                    .attr('stroke', color(initIndex))
                     .attr('d', line(Data[initIndex]))
                     .on("mouseover", function(){
 
                     });
 
-    //æ·»åŠ åœ†ç‚¹å’Œåœ†ç‚¹çš„äº¤äº’
+    //Ìí¼ÓÔ²µãºÍÔ²µãµÄ½»»¥
     svg.selectAll('linecircle')
                  .data(Data[initIndex])
                  .enter()
                  .append('circle')
                  .attr('class','linecircle')
-                 .attr('transform','translate('+margin.left+','+margin.top+')') // åœ†ç‚¹åç§»
-                 .attr('cx', function(d,i){return scaleX(2005+i);})   // åœ†ç‚¹xåæ ‡
-                 .attr('cy', size.height)// åœ†ç‚¹yåæ ‡
-                 .attr('r', radius)           // åœ†ç‚¹åŠå¾„
-                 .attr('fill','yellow')  // åœ†ç‚¹é¢œè‰²
-                 // é¼ æ ‡æ‚¬æµ®
+                 .attr('transform','translate('+margin.left+','+margin.top+')') // Ô²µãÆ«ÒÆ
+                 .attr('cx', function(d,i){return scaleX(2005+i);})   // Ô²µãx×ø±ê
+                 .attr('cy', size.height)// Ô²µãy×ø±ê
+                 .attr('r', radius)           // Ô²µã°ë¾¶
+                 .attr('fill','yellow')  // Ô²µãÑÕÉ«
+                 // Êó±êĞü¸¡
                  .on('mouseover', function(d) {
-                    // å˜å¤§
+                    // ±ä´ó
                     d3.select(this).transition().duration(500).attr('r', 10);
-                    // æ˜¾ç¤ºæ ‡ç­¾
+                    // ÏÔÊ¾±êÇ©
                     tips_text.style("left",d3.event.pageX + "px")
                              .style("top",(d3.event.pageY+20) + "px")
                              .style("opacity",1.0)
-                             .html(d); // æ˜¾ç¤ºæ•°æ®
+                             .html(d); // ÏÔÊ¾Êı¾İ
                   })
-                 // é¼ æ ‡ç§»åŠ¨
+                 // Êó±êÒÆ¶¯
                  .on("mousemove", function() {
                     tips_text.style("left",d3.event.pageX + "px")
                              .style("top",(d3.event.pageY+20) + "px");
                  })
-                 // é¼ æ ‡ç¦»å¼€
+                 // Êó±êÀë¿ª
                  .on('mouseout', function() {
-                    // æ¢å¤
+                    // »Ö¸´
                     d3.select(this).transition().duration(500).attr('r', radius);
-                    // ç§»é™¤æ ‡ç­¾
+                    // ÒÆ³ı±êÇ©
                     tips_text.style("opacity", 0.0);
                  })
-                 // å…¥åœºåŠ¨ç”»
+                 // Èë³¡¶¯»­
                  .transition()
                  .duration(1500)
                  .ease("elastic")
                  .attr("cy", function(d) { return scaleY(d);});
 
-  // é¼ æ ‡æ‚¬æµ®åŠ¨ç”»
+  // Êó±êĞü¸¡¶¯»­
   function mouseoverAmi(i) {
-      //é‡ç»˜è·¯å¾„
+      // ¸ü»»µØÍ¼±³¾°
+      map.transition().duration(500).attr("xlink:href",imageData[i]);
+      //ÖØ»æÂ·¾¶
       linepath.transition()
               .duration(1000)
-              .attr("stroke", color[i])
+              .attr("stroke", color(i))
               .attr("d", line(Data[i]));
       
-      //é‡ç»˜åœ†ç‚¹
+      //ÖØ»æÔ²µã
       svg.selectAll(".linecircle")
           .data(Data[i])
           .transition()
@@ -332,11 +336,11 @@
           );
       }
 
-    // æ¢å¤åŠ¨ç”»
+    // »Ö¸´¶¯»­
     function mouseoutAmi(i) {
     }
 
-  }); // æ•°æ®è¯»å–ç»“æŸ
+  }); // Êı¾İ¶ÁÈ¡½áÊø
 
   </script>
 
