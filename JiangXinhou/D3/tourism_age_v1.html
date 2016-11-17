@@ -2,12 +2,16 @@
 <html> 
 <head> 
   <meta charset="utf-8"> 
-  <title>不同年龄段外国游客</title>
+  <title>Foreign Tourists Of Different Age</title>
 
   <style>
   body{
     margin: 0;
     background: #0E2528; /*背景色*/
+  }
+  a {
+    text-decoration: none;
+    color: white;
   }
   /* 标题 */
   #title{
@@ -78,7 +82,8 @@
 </head>
 
 <body>
-<h3 id="title">不同年龄段外国游客</h3>
+<h3 id="title">Foreign Tourists Of Different Age</h3>
+<h5><a href="tourism_age_v2">Version2</a></h5>
 
   <script src="https://d3js.org/d3.v3.min.js"></script>
 
@@ -244,7 +249,7 @@
   						.attr("class", "statement")
   						.attr('transform','translate('+(margin.left)+','+0+')')
   						.attr("fill", function(d,i){return color[i];})
-  						.attr("x", function(d,i) { return 200+i*stateD; })
+  						.attr("x", function(d,i) { return i*stateD; })
           		.attr("y", 0)
           		.attr("width", 15)
           		.attr("height",15)
