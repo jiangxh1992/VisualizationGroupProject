@@ -52,7 +52,7 @@
 
   /* 折线样式 */
   .line{
-    stroke-width:3;
+    stroke-width:5;
     fill: none;
   }
   .line:hover{
@@ -84,7 +84,7 @@
 
   <script>
   /***************************************************** 数据定义 *************************************************************/
-  var size = {width:1000, height:500};                  // 线图上半部分的尺寸
+  var size = {width:1000, height:450};                  // 线图上半部分的尺寸
   var margin = {left:50, top:40, right:80, bottom:50};  // 边界空间
   var Swidth = size.width + margin.left;                // svg的宽度
   var Sheight = size.height + margin.top;               // svg的高度
@@ -219,7 +219,7 @@
                .attr("width", 500)
                .attr("height", 300)
                .attr("opacity", 0.4)
-               .attr("xlink:href",imageData[initIndex]);
+               .attr("xlink:href","img_country/"+imageData[initIndex]);
 
     /*************** 1.文字标签 ***************/
     var tips_text;
@@ -320,7 +320,7 @@
   // 鼠标悬浮动画
   function mouseoverAmi(i) {
       // 更换地图背景
-      map.transition().duration(500).attr("xlink:href",imageData[i]);
+      map.transition().duration(500).attr("xlink:href","img_country/"+imageData[i]);
       //重绘路径
       linepath.transition()
               .duration(1000)

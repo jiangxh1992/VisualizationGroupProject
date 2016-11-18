@@ -2,7 +2,7 @@
 <html> 
 <head> 
   <meta charset="utf-8"> 
-  <title>Foreign Tourists Of Different Age</title>
+  <title>Foreign Tourists From Different Area</title>
 
   <style>
   body{
@@ -77,25 +77,24 @@
 </head>
 
 <body>
-<h3 id="title">Foreign Tourists Of Different Age</h3>
+<h3 id="title">Foreign Tourists From Different Area</h3>
 
   <script src="https://d3js.org/d3.v3.min.js"></script>
-
   <script>
   /***************************************************** 数据定义 *************************************************************/
-  var size = {width:1000, height:300};                  // 线图上半部分的尺寸
+  var size = {width:1000, height:280};                  // 线图上半部分的尺寸
   var margin = {left:50, top:40, right:80, bottom:50};  // 边界空间
   var Swidth = size.width + margin.left;                // svg的宽度
   var Sheight = size.height + margin.top;               // svg的高度
   
   // 图例数据
-  var dataTitles = ["Age 25-44","Age 45-64","Age 15-24","Age 65+","Age 14-","Average"];
+  var dataTitles = ["Aisa","Europe","North America","Oceania","Africa","Latin America","Average"];
   // 横轴坐标
   var x = [2005,2006,2007,2008,2009,2010,2011,2012,2013,2014];
   // x轴tick
   var xTick = "YEAR"
   // y轴数据上限
-  var yMax = 1300;
+  var yMax = 1600;
   // y轴tick
   var yTick = "Ten Thousand People"
   // 柱状图宽度
@@ -105,17 +104,18 @@
   // 圆点半径
   var radius = 3;
   // 图例之间间距
-  var stateD = 40;
+  var stateD = 130;
 
   // 数据缓冲
   var Data = [];
   var sumData = [0,0,0,0,0,0,0,0,0,0];
-  var indexs = [0,1,2,3,4,5];
+  var indexs = [0,1,2,3,4,5,6];
   // 柱状图数组
   var Bars = [];
 
   // 颜色
-  var color = [d3.rgb(244,189,130),d3.rgb(82,158,63),d3.rgb(168,221,146),d3.rgb(197,58,50),d3.rgb(59,117,175),d3.rgb(179,199,229),d3.rgb(239,134,54)];
+  var color = d3.scale.category20b();
+  //var color = [d3.rgb(244,189,130),d3.rgb(82,158,63),d3.rgb(168,221,146),d3.rgb(197,58,50),d3.rgb(59,117,175),d3.rgb(179,199,229),d3.rgb(239,134,54)];
 
   // 添加svg
   var svg = d3.select("body")
@@ -125,7 +125,7 @@
               .attr("height",2*Sheight + margin.bottom);
 
   /****************************************************** 数据读取 *************************************************************/
-  d3.tsv("age.txt", function(d){
+  d3.tsv("area.txt", function(d){
     // 将一组组十年数据push到数据缓冲
     var groupData = [];
     groupData.push(+d.a);
@@ -241,7 +241,7 @@
   						.append("rect")
   						.attr("class", "statement")
   						.attr('transform','translate('+(margin.left)+','+0+')')
-  						.attr("fill", function(d,i){return color[i];})
+  						.attr("fill", function(d,i){return color(i);})
   						.attr("x", function(d,i) { return i*stateD; })
           		.attr("y", 0)
           		.attr("width", 15)
@@ -265,6 +265,14 @@
                 tips_text.style("opacity", 0.0);
               });
 
+              // 添加文字标注
+              for(var i=0 ; i<dataTitles.length ; i++) {
+                svg.append("text")
+                   .attr("transform", "translate("+[margin.left+15+130*i, 15]+")")
+                   .attr("fill", color(i))
+                   .text(dataTitles[i]);
+              }
+
     /*************** 3.绘制线图 ***************/
     // 折线函数,坐标映射
     var line = d3.svg.line()
@@ -276,7 +284,7 @@
                     .style("stroke-width", 10)
                     .style("opacity", 1.0)
                     .attr('transform','translate('+margin.left+','+margin.top+')')
-                    .attr('stroke', color[5])
+                    .attr('stroke', color(6))
                     .attr('fill', "none")
                     .attr('d', line(sumData))
                     .on("mouseover", function(){
@@ -286,7 +294,7 @@
     var linepath = svg.append('path')
                     .attr('class', 'line')
                     .attr('transform','translate('+margin.left+','+margin.top+')')
-                    .attr('stroke', color[initIndex])
+                    .attr('stroke', color(initIndex))
                     .attr('d', line(Data[initIndex]))
                     .on("mouseover", function(){
 
@@ -337,7 +345,7 @@
       //重绘路径
       linepath.transition()
               .duration(1000)
-              .attr("stroke", color[i])
+              .attr("stroke", color(i))
               .attr("d", line(Data[i]));
       
       //重绘圆点
@@ -364,7 +372,7 @@
                   .enter()
                   .append("rect")
                   .attr("class", "bar")
-                  .attr("fill",color[i])
+                  .attr("fill",color(i))
                   .attr('transform','translate('+(margin.left+barWidth*i)+','+0+')')
                   .attr("x", function(d,ii) { return scaleX(2005+ii); })
                   .attr("y", Sheight)
