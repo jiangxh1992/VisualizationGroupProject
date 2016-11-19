@@ -45,11 +45,11 @@
 <body>
 <h3 id="title">The Dynamic Data Of Foreign Tourists Traval To China Over The Past 10 Years</h3>
 <ul id="index-group">
-<li class="index"><a href="tourism_age_v1.html">OF Different Age<a></div>
+<li class="index"><a href="html/tourism_age_v1.html">OF Different Age<a></div>
 <hr/>
-<li class="index"><a href="tourism_country_v1.html">From Different Country<a></div>
+<li class="index"><a href="html/tourism_country_v1.html">From Different Country<a></div>
 <hr/>
-<li class="index"><a href="tourism_area_v1.html">From Different Area<a></div>
+<li class="index"><a href="html/tourism_area_v1.html">From Different Area<a></div>
 <hr/>
 </ul>
 
@@ -75,7 +75,7 @@ var cloudScale = [];
 var cloudSize = [800, 600];
 var cloudOrigin = {x:700,y:300};
 // svg尺寸
-var svgSize = {width:1200,height:600};
+var svgSize = {width:1200,height:550};
 // 颜色组
 var color = d3.scale.category20c();
 
@@ -86,7 +86,7 @@ var svg = d3.select("body")
             .attr("height", svgSize.height);
 
 /*************** 0.绘制国家地图 ***************/
-var imageData = ["china.png"];
+var imageData = ["img_country/china.png"];
     var map = svg.selectAll("map")
                .data(imageData)
                .enter()
@@ -100,7 +100,7 @@ var imageData = ["china.png"];
 
 /****************************************************** 数据读取 *************************************************************/
   // 1.读取年龄数据
-  d3.tsv("age.txt", function(d){
+  d3.tsv("data/age.txt", function(d){
     // 将一组组十年数据push到数据缓冲
     var groupData = [];
     groupData.push(+d.a);
@@ -132,7 +132,7 @@ var imageData = ["china.png"];
     cloudScale.push(averageData);
 
     // 2.读取国家数据
-    d3.tsv("country.txt", function(d){
+    d3.tsv("data/country.txt", function(d){
     // 将一组组十年数据push到数据缓冲
     var groupData = [];
     groupData.push(+d.a);
@@ -164,7 +164,7 @@ var imageData = ["china.png"];
     cloudScale.push(averageData);
 
     // 3.读取地区数据
-    d3.tsv("area.txt", function(d){
+    d3.tsv("data/area.txt", function(d){
     // 将一组组十年数据push到数据缓冲
     var groupData = [];
     groupData.push(+d.a);
@@ -232,7 +232,7 @@ var updateCloud = function(i) {
            .size(cloudSize)
            .words(cloudText[i]
                   .map(function(d,ii) {return {"text": d, "size": cloudScale[i][ii]};}))
-                  .rotate(0)//function() {return ~~(Math.random()*2)*90;}
+                  .rotate(function() {return ~~(Math.random()*2)*90;})//function() {return ~~(Math.random()*2)*90;}
                   .fontSize(function(d) { return d.size; })
                   .on("end", draw)//结束时运行draw函数
                   .start();
