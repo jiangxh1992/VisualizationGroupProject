@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html> 
+<head> 
+  <meta charset="utf-8"> 
+  <title>Foreign Tourists From Different Area</title>
+
+  <style>
+  body{
+    margin: 0;
+    background: #0E2528; /*背景色*/
+  }
+  /* 标题 */
+  #title{
+    color: #F1DCD1;
+    font-family:Verdana;
+  }
+
+  /* 坐标轴样式 */
+  .axis path, .axis line{
+    fill: none;
+    stroke: white;
+    shape-rendering: crispEdges;
+  }
+
+  /* 坐标轴文字样式 */
+  .axis text{
+    font-family: Verdana;
+    font-size: 11px;
+    fill: white;
+  }
+
+  /* 提示框样式 */
+  #tips_text {
+   font-family: simsun;
+	 font-size: 14px;
+	 width: 120;
+	 height: 50;
+	 position: absolute;
+	 text-align: center;
+   border-style: dotted; 
+	 border-width: 1px;
+	 background-color: #F0D6BD;
+	 border-radius: 2px;
+  }
+
+  /* 图例 */
+  .statement {
+  }
+  .statement:hover {
+  	stroke: #FFF;
+  }
+
+  /* 折线样式 */
+  .line{
+    stroke-width:3;
+    fill: none;
+  }
+  .line:hover{
+  	stroke: #73FCCF;
+  }
+
+  /* 折线上的点 */
+  .linecircle{
+  }
+  .linecircle:hover{
+  	fill: #BFFF09;
+  }
+
+  /* 柱状图样式 */
+  .bar:hover, .barup:hover{
+  	stroke: #FFF;
+    stroke-width:2;
+  }
+  </style>
+</head>
+
+<body>
+<h3 id="title">Foreign Tourists From Different Area</h3>
+<span id="showBtn" style = "color: white; float: right; position: absolute; left: 1000px;top: 280px;" >Show</span>
+
+  <script src="https://d3js.org/d3.v3.min.js"></script>
+
+  <script>
+  /***************************************************** 数据定义 *************************************************************/
+  var size = {width:900, height:260};                  // 线图上半部分的尺寸
+  var margin = {left:50, top:40, right:80, bottom:50};  // 边界空间
+  var Swidth = size.width + margin.left;                // svg的宽度
+  var Sheight = size.height + margin.top;               // svg的高度
+  
+  // 图例数据
+  var dataTitles = ["Aisa","Europe","North America","Oceania","Africa","Latin America","Average"];
+  // 横轴坐标
+  var x = [2005,2006,2007,2008,2009,2010,2011,2012,2013,2014];
+  // x轴tick
+  var xTick = "YEAR"
+  // y轴数据上限
+  var yMax = 1600;
+  // y轴tick
+  var yTick = "Ten Thousand People"
+  // 柱状图宽度
+  var barWidth = [15, 10];
+  // 线图初始的那条
+  var initIndex = 0;
+  // 圆点半径
+  var radius = 5;
+  // 图例之间间距
+  var stateD = 130;
+
+  // 数据缓冲
+  var Data = [];
+  var sumData = [0,0,0,0,0,0,0,0,0,0];
+  var indexs = [0,1,2,3,4,5,6];
+  // 柱状图数组
+  var Bars = [];
+  var Bars2 = [];// 朝上
+  var isShow = 0;// 标记是否展示向上的柱图
+
+  // 颜色
+  var color = d3.scale.category20b();
+  // var start = d3.rgb(64,64,149);
+  // var end = d3.rgb(79,172,87);
+  // var color = d3.interpolate(start,end);
+  // var linear = d3.scale.linear()
+  //       .domain([0,6])
+  //       .range([0,1]);
+  //var color = [d3.rgb(244,189,130),d3.rgb(82,158,63),d3.rgb(168,221,146),d3.rgb(197,58,50),d3.rgb(59,117,175),d3.rgb(179,199,229),d3.rgb(239,134,54)];
+
+  // 添加svg
+  var svg = d3.select("body")
+              .append("svg")
+              .attr('class','svg')
+              .attr("width",Swidth + margin.right)
+              .attr("height",2*Sheight);
+
+  /****************************************************** 数据读取 *************************************************************/
+  d3.tsv("../data/area.txt", function(d){
+    // 将一组组十年数据push到数据缓冲
+    var groupData = [];
+    groupData.push(+d.a);
+    groupData.push(+d.b);
+    groupData.push(+d.c);
+    groupData.push(+d.d);
+    groupData.push(+d.e);
+    groupData.push(+d.f);
+    groupData.push(+d.g);
+    groupData.push(+d.h);
+    groupData.push(+d.i);
+    groupData.push(+d.j);
+    Data.push(groupData);
+    console.log(groupData);
+
+    // 每次返回一组十年的数据(这里用不到)
+    return{
+      a:+d.a,
+      b:+d.b,
+      d:+d.d,
+      c:+d.c,
+      e:+d.e,
+      f:+d.f,
+      g:+d.g,
+      h:+d.h,
+      i:+d.i,
+      j:+d.j
+    }
+
+  },function(error, data){
+
+    // 返回一个对象数组，每个对象有十年中每年的一个数据
+    console.log(Data);
+
+    // 平均数据
+    for(var i = 0; i < 10; i++){
+   		for(var j = 0; j < Data.length; j++){
+    		sumData[i] += Data[j][i];
+    	}
+    	sumData[i] /= Data.length;
+      sumData[i] = sumData[i].toFixed(2);
+    }
+    // 将平均数据加入数据数组
+    Data.push(sumData);
+
+    /**************************************************** 比例尺 ****************************************************************/
+
+    var scaleX = d3.scale.linear()
+                         .domain([2005,2014])    // 数据范围
+                         .range([0,size.width]); // 界面尺寸范围
+    var scaleY = d3.scale.linear()
+                         .domain([0,yMax])
+                         .range([size.height,0]);
+    var scaleY2 = d3.scale.linear()
+                         .domain([0,yMax])
+                         .range([0,size.height]);
+    // 逆比例尺
+    var reverseY = d3.scale.linear()
+    					   .domain([size.height,0])
+    					   .range([0,yMax]);
+
+    /****************************************************** 坐标轴 **************************************************************/
+
+    // 1.定义横轴
+    var axisX = d3.svg.axis()
+                      .scale(scaleX)
+                      .orient("top")
+                      .ticks(x.length+1); // 标注个数
+    // 调整横位置并添加横轴标签
+    svg.append("g")
+        .attr("class","axis")
+        .attr("transform","translate("+margin.left+","+Sheight+")")
+        .call(axisX)
+        .append("text")
+        .text(xTick)
+        .attr("transform","translate("+(size.width+35)+","+"0)");
+
+    // 2.定义纵轴
+    var axisY = d3.svg.axis()
+                      .scale(scaleY)
+                      .orient("left")
+                      .ticks(10); // 标注个数
+    svg.append("g")
+       .attr("class","axis")
+       .attr("transform","translate("+margin.left+","+(margin.top)+")")
+       .call(axisY)
+       .append("text")
+       .text(yTick);
+
+    var axisY2 = d3.svg.axis()
+                      .scale(scaleY2)
+                      .orient("left")
+                      .ticks(10); // 标注个数
+    svg.append("g")
+       .attr("class","axis")
+       .attr("transform","translate("+margin.left+","+Sheight+")")
+       .call(axisY2)
+       .append("text")
+       .attr("transform","translate("+0+","+(size.height+10)+")")
+       .text(yTick);
+
+    /*********************************************** 柱状图、折线图 **************************************************************/
+
+    /*************** 1.文字标签 ***************/
+    var tips_text;
+    tips_text = d3.select("body")
+  				 .append('div')
+  				 .attr("id", "tips_text")
+  				 .style("opacity",0.0);
+
+  	/*************** 2.绘制图例 ***************/
+  	var statement = svg.selectAll("statement")
+  						.data(indexs)
+  						.enter()
+  						.append("rect")
+  						.attr("class", "statement")
+  						.attr('transform','translate('+(margin.left)+','+0+')')
+  						.attr("fill", function(d,i){return color(i);})
+  						.attr("x", function(d,i) { return i*stateD; })
+          		.attr("y", 0)
+          		.attr("width", 15)
+          		.attr("height",15)
+          		.style("font-size", 20)
+              .on("mouseover", function(d, i){
+                // 重绘
+                mouseoverAmi(i);
+                // 显示标签
+                tips_text.style("left",d3.event.pageX + "px")
+                          .style("top",(d3.event.pageY+20) + "px")
+                          .style("opacity",1.0)
+                          .html(dataTitles[d]); // 显示数据
+                textShow.attr("fill", color(i))
+                        .text(dataTitles[i]);
+              })
+              .on("mosemove", function(){
+                tips_text.style("left",d3.event.pageX + "px")
+                         .style("top",(d3.event.pageY+20) + "px");
+              })
+              .on("mouseout", function(d,i){
+                  // 恢复
+                  mouseoutAmi(i);
+                  // 移除标签
+                  tips_text.style("opacity", 0.0);
+              });
+
+              // 添加文字标注
+              for(var i=0 ; i<dataTitles.length ; i++) {
+                svg.append("text")
+                   .attr("transform", "translate("+[margin.left+15+130*i, 15]+")")
+                   .attr("fill", color(i))
+                   .text(dataTitles[i]);
+              }
+
+              // 显示当前大洲文字
+              var textShow = svg.append("text")
+                                .attr("transform", "translate("+[margin.left+430, 200]+")")
+                                .attr("fill",color(initIndex))
+                                .attr("font-size", 80)
+                                .text(dataTitles[initIndex]);
+
+    /*************** 3.绘制线图 ***************/
+    // 折线函数,坐标映射
+    var line = d3.svg.line()
+                     .x(function(d,i) { return scaleX(2005+i); })
+                     .y(function(d,i) { return scaleY(d); })
+                     .interpolate('monotone'); // linear，step-after
+
+    // 平均数折线(静态)
+    var path = svg.append('path')
+                    .style("stroke-width", 10)
+                    .style("opacity", 0.6)
+                    .attr('transform','translate('+margin.left+','+margin.top+')')
+                    .attr('stroke', color(6))
+                    .attr("fill", "none")
+                    .attr('d', line(sumData))
+                    .on("mouseover", function(){
+                    });
+
+    // 绘制当前折线
+    var linepath = svg.append('path')
+                    .attr('class', 'line')
+                    .attr('transform','translate('+margin.left+','+margin.top+')')
+                    .attr('stroke', color(initIndex))
+                    .attr('d', line(Data[initIndex]))
+                    .on("mouseover", function(){
+
+                    });
+
+    //添加圆点和圆点的交互
+    svg.selectAll('linecircle')
+                 .data(Data[initIndex])
+                 .enter()
+                 .append('circle')
+                 .attr('class','linecircle')
+                 .attr('transform','translate('+margin.left+','+margin.top+')') // 圆点偏移
+                 .attr('cx', function(d,i){return scaleX(2005+i);})   // 圆点x坐标
+                 .attr('cy', size.height)// 圆点y坐标
+                 .attr('r', radius)           // 圆点半径
+                 .attr('fill','yellow')  // 圆点颜色
+                 // 鼠标悬浮
+                 .on('mouseover', function(d) {
+                    // 变大
+                    d3.select(this).transition().duration(500).attr('r', 10);
+                    // 显示标签
+                    tips_text.style("left",d3.event.pageX + "px")
+                             .style("top",(d3.event.pageY+20) + "px")
+                             .style("opacity",1.0)
+                             .html(d); // 显示数据
+                  })
+                 // 鼠标移动
+                 .on("mousemove", function() {
+                    tips_text.style("left",d3.event.pageX + "px")
+                             .style("top",(d3.event.pageY+20) + "px");
+                 })
+                 // 鼠标离开
+                 .on('mouseout', function() {
+                    // 恢复
+                    d3.select(this).transition().duration(500).attr('r', radius);
+                    // 移除标签
+                    tips_text.style("opacity", 0.0);
+                 })
+                 // 入场动画
+                 .transition()
+                 .duration(1500)
+                 .ease("elastic")
+                 .attr("cy", function(d) { return scaleY(d);});
+    
+    /*************** 4.绘制柱图 ***************/
+    drawBarChart(0,barWidth[0]);// 默认绘制重合柱状图
+    drawBarChart2(barWidth[1],barWidth[1]);
+    // 控制朝上柱图的现实与隐藏
+    d3.select("#showBtn")
+      .on("mouseover", function(){
+        // 线图调整到平均线
+        mouseoverAmi(Data.length-1);
+        // 更新图标
+        textShow.attr("fill", color(Data.length-1))
+                        .text(dataTitles[Data.length-1]);
+
+        if (isShow == 0) {
+          isShow = 1;
+          d3.select(this).html("Hide");
+          updateBarup(isShow);
+        }else {
+          isShow = 0;
+          d3.select(this).html("Show");
+          updateBarup(isShow);
+        }
+      });
+
+    /************************************************* 绘图函数 ****************************************************************/
+  // 1.绘制柱状图函数
+  function drawBarChart(offset, width) {
+    for (var i = 0; i < Data.length-1; i++)
+    {
+      // 绘制柱状图
+      var bar = svg.selectAll("bar bar"+i)
+                  .data(Data[i])
+                  .enter()
+                  .append("rect")
+                  .attr("class", "bar bar"+i)
+                  .attr("fill",color(i))
+                  .attr('transform','translate('+(margin.left-width/2+i*offset)+','+0+')')
+                  .attr("x", function(d,ii) { return scaleX(2005+ii); })
+                  .attr("y", Sheight)
+                  .attr("width", width) // 柱状图宽度
+                  .attr("height",0)
+                  .on("mouseover", function(d){
+                    // 显示标签
+                    tips_text.style("left",d3.event.pageX + "px")
+                             .style("top",(d3.event.pageY+20) + "px")
+                             .style("opacity",1.0)
+                             .html(d); // 显示数据
+                  })
+                  .on("mousemove", function(){
+                    tips_text.style("left",d3.event.pageX + "px")
+                             .style("top",(d3.event.pageY+20) + "px");
+                  })
+                  .on("mouseout", function(){
+                      // 移除标签
+                    tips_text.style("opacity", 0.0);
+                  })
+                  // 入场动画
+                  .transition()
+                  .duration(2000)
+                  .ease("bounce")
+                  .attr("height", function(d) { return scaleY2(d); });
+      Bars.push(bar);
+    } // 循环结束
+  }
+
+  function drawBarChart2(offset, width) {
+    for (var i = 0; i < Data.length-1; i++)
+    {
+      // 绘制柱状图
+      var bar = svg.selectAll("barup"+i)
+                  .data(Data[i])
+                  .enter()
+                  .append("rect")
+                  .attr("class", "barup barup"+i)
+                  .attr("fill",color(i))
+                  .attr('transform','translate('+(margin.left-width/2+i*offset)+','+0+')')
+                  .attr("x", function(d,ii) { return scaleX(2005+ii); })
+                  .attr("y", Sheight)
+                  .attr("width", width) // 柱状图宽度
+                  .attr("height",0)
+                  .on("mouseover", function(d){
+                    // 显示标签
+                    tips_text.style("left",d3.event.pageX + "px")
+                             .style("top",(d3.event.pageY+20) + "px")
+                             .style("opacity",1.0)
+                             .html(d); // 显示数据
+                  })
+                  .on("mousemove", function(){
+                    tips_text.style("left",d3.event.pageX + "px")
+                             .style("top",(d3.event.pageY+20) + "px");
+                  })
+                  .on("mouseout", function(){
+                      // 移除标签
+                    tips_text.style("opacity", 0.0);
+                  });
+      Bars.push(bar);
+    } // 循环结束
+  }
+
+  // 2.朝上柱图显示隐藏动画
+  function updateBarup(isopen){
+    // 重绘柱状图
+    for(var i = 0; i < Data.length-1; i++){
+      svg.selectAll(".barup"+i)
+        .data(Data[i])
+        .transition()
+        .duration(1000)
+        .ease("bounce")
+        .attr("height", function(d) { return scaleY2(d)*isopen; })
+        .attr("y",function(d){ return Sheight-scaleY2(d)*isopen; });
+    }
+  }
+
+
+  // 3.鼠标悬浮重绘动画
+  function mouseoverAmi(i) {
+      if (i>=Data.length) return;
+      //重绘路径
+      linepath.transition()
+              .duration(1000)
+              .attr("stroke", color(i))
+              .attr("d", line(Data[i]));
+      
+      //重绘圆点
+      svg.selectAll(".linecircle")
+          .data(Data[i])
+          .transition()
+          .duration(1000) 
+          .attr("cy", function(d){return scaleY(d);}
+          );
+
+      // 重绘柱状图
+      if (i>=Data.length-1) return;
+      svg.selectAll(".bar"+i)
+          .data(Data[i])
+          .transition()
+          .duration(1000)
+          .attr("y",function(d){return Sheight-scaleY2(d);});
+    }
+
+    // 4.恢复动画
+    function mouseoutAmi(i) {
+      if (i>=Data.length-1) return;
+      // 恢复柱状图
+      svg.selectAll(".bar"+i)
+          .transition()
+          .duration(1000)
+          .attr("y",Sheight);
+    }
+
+  }); // 数据读取结束
+
+  </script>
+
+</body>
+</html>
