@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html style="height: 100%">
+   <head>
+       <meta charset="utf-8">
+   </head>
+   <body style="height: 100%; margin: 0">
+       <div id="container" style="height: 100%"></div>
+       <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/echarts-all-3.js"></script>
+       <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/extension/dataTool.min.js"></script>
+       <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/map/js/china.js"></script>
+       <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/map/js/world.js"></script>
+       <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=ZUONbpqGBsYGXNIYHicvbAbM"></script>
+       <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/extension/bmap.min.js"></script>
+       <script type="text/javascript">
+var dom = document.getElementById("container");
+var myChart = echarts.init(dom);
+var app = {};
+option = null;
+
+var convertData = function (data) {
+    var res = [];
+    for (var i = 0; i < data.length; i++) {
+        var geoCoord = geoCoordMap[data[i].name];
+        if (geoCoord) {
+            res.push({
+                name: data[i].name,
+                value: geoCoord.concat(data[i].value)
+            });
+        }
+    }
+    return res;
+};
+
+option = {
+    title: {
+        text: "Shanghai VS Beijing Agriculture Development"
+    },
+    tooltip: {
+        trigger: "axis"
+    },
+    legend: {
+        data: ["Beijing", "Shanghai", "Being Inc", "Shanghai Inc"],
+        y: "bottom"
+    },
+    toolbox: {
+        show: false,
+        feature: {
+            mark: {
+                show: true
+            },
+            dataView: {
+                show: true,
+                readOnly: false
+            },
+            restore: {
+                show: true
+            },
+            saveAsImage: {
+                show: true
+            }
+        }
+    },
+    calculable: true,
+    xAxis: [
+        {
+            type: "category",
+            axisLine: {
+                onZero: false
+            },
+            data: ["1995", "1996", "1997", "1998", "1999", "2000", "2001", "2002", "2003", "2004", "2005", "2006", "2007", "2008", "2009", "2010", "2011", "2012", "2013", "2014"],
+            name: "Year"
+        }
+    ],
+    grid: {
+        y: 70
+    },
+    yAxis: [
+        {
+            type: "value",
+            name: "Gross agricultural output"
+        },
+        {
+            type: "value",
+            name: "Increment",
+            scale: true
+        }
+    ],
+    series: [
+        {
+            name: "Beijing",
+            type: "bar",
+            data: [46.89, 45.62, 47.36, 48.46, 91.2, 91.09, 89.7, 90.1, 88.75, 92.68, 100.59, 104.47, 115.48, 128.1, 140.44, 154.2, 163.37, 166.29, 170.41, 155.1]
+        },
+        {
+            name: "Shanghai",
+            type: "bar",
+            data: [77.71, 87.64, 85.2, 89.1, 87.9, 89.81, 95.53, 97.21, 98.16, 109.32, 111.25, 119.99, 126.74, 137.52, 147.53, 155.3, 165.07, 171.48, 172.28, 169.51]
+        },
+        {
+            name: "Being Inc",
+            type: "line",
+            yAxisIndex: 1,
+            data: [0, -1.27, 1.74, 1.1, 42.74, -0.11, -1.39, 0.4, -1.35, 3.93, 7.91, 3.88, 11.01, 12.62, 12.34, 13.76, 9.17, 2.92, 4.12, -15.31]
+        },
+        {
+            name: "Shanghai Inc",
+            type: "line",
+            yAxisIndex: 1,
+            data: [0, 9.93, -2.44, 3.9, -1.2, 1.91, 5.72, 1.68, 0.95, 11.16, 1.93, 8.74, 6.75, 10.78, 10.01, 7.77, 9.77, 6.41, 0.8, -2.77]
+        }
+    ]
+};
+if (option && typeof option === "object") {
+    myChart.setOption(option, true);
+}
+       </script>
+   </body>
+</html>

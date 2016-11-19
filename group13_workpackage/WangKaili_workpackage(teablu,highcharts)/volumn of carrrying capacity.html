@@ -1,0 +1,80 @@
+<html>
+<head>
+<meta charset="UTF-8" />
+<title>Changes cargo in inland ports and coastal ports</title>
+<script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="http://code.highcharts.com/highcharts.js"></script>
+</head>
+<body>
+<div id="container" style="width: 700px; height: 600px; margin: 0 auto"></div>
+<script language="JavaScript">
+$(document).ready(function() {  
+   var chart = {
+      type: 'area'
+   };
+   var title = {
+      text: 'change of carrying capacity  in inland ports and coastal ports'  
+   };
+   var subtitle = {
+      text: '2005-2014'  
+   };
+   var xAxis = {
+      allowDecimals: false,
+      labels: {
+         formatter: function () {
+            return this.value; // clean, unformatted number for year
+         }
+      }
+   };
+   var yAxis = {
+      title: {
+         text: 'Freight volume (ten thousand tons)'
+      },
+      labels: {
+         formatter: function () {
+            return this.value /100+'k';
+         }
+      }
+   };
+   var tooltip = {
+      pointFormat: '{series.name} volumn <b>{point.y:,.0f}</b><br/> in {point.x}'
+   };
+   var plotOptions = {
+      area: {
+         pointStart: 2005,
+         marker: {
+            enabled: false,
+            symbol: 'circle',
+            radius:1,
+            states: {
+               hover: {
+                 enabled: true
+               }
+            }
+         }
+      }
+   };
+   var series= [{
+         name: 'coastal port',
+            data: [29277,34219,38820,42959,47581,50858,61679,66355,72809,76979]
+        }, {
+            name: 'inland port',
+            data: [14316,16926,21824,22357,17330,18701,22629,30320,26312,26845]
+      }
+   ];     
+      
+   var json = {};   
+   json.chart = chart; 
+   json.title = title;   
+   json.subtitle = subtitle; 
+   json.tooltip = tooltip;
+   json.xAxis = xAxis;
+   json.yAxis = yAxis;  
+   json.series = series;
+   json.plotOptions = plotOptions;
+   $('#container').highcharts(json);
+  
+});
+</script>
+</body>
+</html>

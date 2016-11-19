@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html style="height: 100%">
+   <head>
+       <meta charset="utf-8">
+   </head>
+   <body style="height: 100%; margin: 0">
+       <div id="container" style="height: 100%"></div>
+       <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/echarts-all-3.js"></script>
+       <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/extension/dataTool.min.js"></script>
+       <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/map/js/china.js"></script>
+       <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/map/js/world.js"></script>
+       <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=ZUONbpqGBsYGXNIYHicvbAbM"></script>
+       <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/extension/bmap.min.js"></script>
+       <script type="text/javascript">
+var dom = document.getElementById("container");
+var myChart = echarts.init(dom);
+var app = {};
+option = null;
+
+var convertData = function (data) {
+    var res = [];
+    for (var i = 0; i < data.length; i++) {
+        var geoCoord = geoCoordMap[data[i].name];
+        if (geoCoord) {
+            res.push({
+                name: data[i].name,
+                value: geoCoord.concat(data[i].value)
+            });
+        }
+    }
+    return res;
+};
+
+option = {
+    title: {
+        text: "Gansu & Heilongjiang Agriculture Development"
+    },
+    tooltip: {
+        trigger: "axis"
+    },
+    legend: {
+        data: ["Gansu", "Heilongjiang", "Gansu Inc", "Heilongjiang Inc"],
+        y: "bottom"
+    },
+    toolbox: {
+        show: false,
+        feature: {
+            mark: {
+                show: true
+            },
+            dataView: {
+                show: true,
+                readOnly: false
+            },
+            restore: {
+                show: true
+            },
+            saveAsImage: {
+                show: true
+            }
+        }
+    },
+    calculable: true,
+    xAxis: [
+        {
+            type: "category",
+            axisLine: {
+                onZero: false
+            },
+            data: ["1995", "1996", "1997", "1998", "1999", "2000", "2001", "2002", "2003", "2004", "2005", "2006", "2007", "2008", "2009", "2010", "2011", "2012", "2013", "2014"],
+            name: "Year"
+        }
+    ],
+    grid: {
+        y: 70
+    },
+    yAxis: [
+        {
+            type: "value",
+            name: "Gross agricultural output"
+        },
+        {
+            type: "value",
+            name: "Increment",
+            scale: true
+        }
+    ],
+    series: [
+        {
+            name: "Gansu",
+            type: "bar",
+            data: [200.24, 235.25, 223.07, 252.55, 242.7, 238.97, 253.99, 257.26, 275.82, 331.37, 362.89, 395.84, 458.73, 529.56, 587.27, 757.6, 848.45, 984.24, 1104.47, 1174.93]
+        },
+        {
+            name: "Heilongjiang",
+            type: "bar",
+            data: [462.2, 558.7, 571.1, 517.59, 460, 414.36, 450.59, 487.5, 502.93, 620.19, 718.59, 817.45, 971.94, 1142.31, 1206.79, 1369.2, 1801.84, 2315.64, 2856.34, 3015.61]
+        },
+        {
+            name: "Gansu Inc",
+            type: "line",
+            yAxisIndex: 1,
+            data: [0, 35.01, -12.18, 29.48, -9.85, -3.73, 15.02, 3.27, 18.56, 55.55, 31.52, 32.95, 62.89, 70.83, 57.71, 170.33, 90.85, 135.79, 120.23, 170.46]
+        },
+        {
+            name: "Heilongjiang Inc",
+            type: "line",
+            yAxisIndex: 1,
+            data: [0, 96.5, 12.4, -53.51, -57.59, -45.64, 36.23, 36.91, 15.43, 117.26, 98.4, 98.86, 154.49, 170.37, 64.48, 162.41, 432.64, 513.8, 540.7, 159.27]
+        }
+    ]
+};
+if (option && typeof option === "object") {
+    myChart.setOption(option, true);
+}
+       </script>
+   </body>
+</html>

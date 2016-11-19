@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html style="height: 100%">
+   <head>
+       <meta charset="utf-8">
+   </head>
+   <body style="height: 100%; margin: 0">
+       <div id="container" style="height: 100%"></div>
+       <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/echarts-all-3.js"></script>
+       <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/extension/dataTool.min.js"></script>
+       <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/map/js/china.js"></script>
+       <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/map/js/world.js"></script>
+       <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=ZUONbpqGBsYGXNIYHicvbAbM"></script>
+       <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/extension/bmap.min.js"></script>
+       <script type="text/javascript">
+var dom = document.getElementById("container");
+var myChart = echarts.init(dom);
+var app = {};
+option = null;
+
+var convertData = function (data) {
+    var res = [];
+    for (var i = 0; i < data.length; i++) {
+        var geoCoord = geoCoordMap[data[i].name];
+        if (geoCoord) {
+            res.push({
+                name: data[i].name,
+                value: geoCoord.concat(data[i].value)
+            });
+        }
+    }
+    return res;
+};
+
+option = {
+    tooltip: {
+        trigger: "axis",
+        axisPointer: {
+            type: "shadow"
+        }
+    },
+    legend: {
+        data: ["Agriculture", "Forestry", "Animal husbandry", "Fisheries"],
+        y: "bottom"
+    },
+    toolbox: {
+        feature: {
+            mark: {
+                show: true
+            },
+            dataView: {
+                show: true,
+                readOnly: true
+            },
+            magicType: {
+                show: false,
+                type: ["line", "bar", "stack", "tiled"]
+            },
+            restore: {
+                show: true
+            },
+            saveAsImage: {
+                show: true
+            }
+        }
+    },
+    calculable: true,
+    xAxis: [
+        {
+            type: "value",
+            scale: true,
+            name: "100 M"
+        }
+    ],
+    yAxis: [
+        {
+            type: "category",
+            data: ["2008", "2009", "2010", "2011", "2012", "2013", "2014"],
+            name: "Year"
+        }
+    ],
+    series: [
+        {
+            name: "Agriculture",
+            type: "bar",
+            stack: "总量",
+            itemStyle: {
+                normal: {
+                    label: {
+                        show: true,
+                        position: "insideRight"
+                    }
+                }
+            },
+            data: [128.1, 140.44, 154.2, 163.37, 166.29, 170.41, 155.1]
+        },
+        {
+            name: "Forestry",
+            type: "bar",
+            stack: "总量",
+            itemStyle: {
+                normal: {
+                    label: {
+                        show: true,
+                        position: "insideRight"
+                    }
+                }
+            },
+            data: [140.52, 136.08, 139.6, 162.73, 154.16, 154.75, 152.66]
+        },
+        {
+            name: "Animal husbandry",
+            type: "bar",
+            stack: "总量",
+            itemStyle: {
+                normal: {
+                    label: {
+                        show: true,
+                        position: "insideRight"
+                    }
+                }
+            },
+            data: [140.52, 136.08, 139.6, 162.73, 154.16, 154.75, 152.66]
+        },
+        {
+            name: "Fisheries",
+            type: "bar",
+            stack: "总量",
+            itemStyle: {
+                normal: {
+                    label: {
+                        show: true,
+                        position: "insideRight"
+                    }
+                }
+            },
+            data: [90.79, 100.28, 110.5, 110.52, 120.98, 120.78, 130.2]
+        }
+    ],
+    title: {
+        text: "Beijing Agriculture Proportion Change",
+        x: "center"
+    }
+};
+if (option && typeof option === "object") {
+    myChart.setOption(option, true);
+}
+       </script>
+   </body>
+</html>

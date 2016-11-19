@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html style="height: 100%">
+   <head>
+       <meta charset="utf-8">
+   </head>
+   <body style="height: 100%; margin: 0">
+       <div id="container" style="height: 100%"></div>
+       <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/echarts-all-3.js"></script>
+       <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/extension/dataTool.min.js"></script>
+       <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/map/js/china.js"></script>
+       <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/map/js/world.js"></script>
+       <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=ZUONbpqGBsYGXNIYHicvbAbM"></script>
+       <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/extension/bmap.min.js"></script>
+       <script type="text/javascript">
+var dom = document.getElementById("container");
+var myChart = echarts.init(dom);
+var app = {};
+option = null;
+
+var convertData = function (data) {
+    var res = [];
+    for (var i = 0; i < data.length; i++) {
+        var geoCoord = geoCoordMap[data[i].name];
+        if (geoCoord) {
+            res.push({
+                name: data[i].name,
+                value: geoCoord.concat(data[i].value)
+            });
+        }
+    }
+    return res;
+};
+
+option = {
+      title: {
+        text: "Per Capita Disposable Personal Income",
+        subtext: "",
+        x: "center"
+    },
+    tooltip: {
+        trigger: "item"
+    },
+    legend: {
+        orient: "vertical",
+        x: "left",
+        data: ["2014", "2013"]
+    },
+    dataRange: {
+        min: 0,
+        max: 45965.83,
+        x: "left",
+        y: "bottom",
+        text: ["高", "低"],
+        calculable: true,
+        color: ["#006edd", "#e0ffff"]
+    },
+    toolbox: {
+        show: false,
+        orient: "vertical",
+        x: "right",
+        y: "bottom",
+        feature: {
+            mark: {
+                show: true
+            },
+            dataView: {
+                show: true,
+                readOnly: false
+            },
+            restore: {
+                show: true
+            },
+            saveAsImage: {
+                show: true
+            }
+        }
+    },
+    roamController: {
+        show: false,
+        x: "right",
+        mapTypeControl: {
+            china: true
+        }
+    },
+    series: [
+        {
+            name: "2014",
+            type: "map",
+            mapType: "china",
+            roam: false,
+            mapValueCalculation: "sum",
+            itemStyle: {
+                normal: {
+                    label: {
+                        show: true
+                    }
+                },
+                emphasis: {
+                    label: {
+                        show: true
+                    }
+                }
+            },
+            data: [
+                {
+                    value: 44488.57,
+                    name: "北京"
+                },
+                {
+                    value: 28832.29,
+                    name: "天津"
+                },
+                {
+                    value: 16647.4,
+                    name: "河北"
+                },
+                {
+                    value: 16538.32,
+                    name: "山西"
+                },
+                {
+                    value: 20559.34,
+                    name: "内蒙古"
+                },
+                {
+                    value: 22820.15,
+                    name: "辽宁"
+                },
+                {
+                    value: 17520.39,
+                    name: "吉林"
+                },
+                {
+                    value: 17404.39,
+                    name: "黑龙江"
+                },
+                {
+                    value: 45965.83,
+                    name: "上海"
+                },
+                {
+                    value: 27172.77,
+                    name: "江苏"
+                },
+                {
+                    value: 32657.57,
+                    name: "浙江"
+                },
+                {
+                    value: 16795.52,
+                    name: "安徽"
+                },
+                {
+                    value: 23330.85,
+                    name: "福建"
+                },
+                {
+                    value: 16734.17,
+                    name: "江西"
+                },
+                {
+                    value: 20864.21,
+                    name: "山东"
+                },
+                {
+                    value: 15695.18,
+                    name: "河南"
+                },
+                {
+                    value: 18283.23,
+                    name: "湖北"
+                },
+                {
+                    value: 17621.74,
+                    name: "湖南"
+                },
+                {
+                    value: 25684.96,
+                    name: "广东"
+                },
+                {
+                    value: 15557.08,
+                    name: "广西"
+                },
+                {
+                    value: 17476.46,
+                    name: "海南"
+                },
+                {
+                    value: 18351.9,
+                    name: "重庆"
+                },
+                {
+                    value: 15749.01,
+                    name: "四川"
+                },
+                {
+                    value: 12371.06,
+                    name: "贵州"
+                },
+                {
+                    value: 13772.21,
+                    name: "云南"
+                },
+                {
+                    value: 10730.22,
+                    name: "西藏"
+                },
+                {
+                    value: 15836.75,
+                    name: "陕西"
+                },
+                {
+                    value: 12184.71,
+                    name: "甘肃"
+                },
+                {
+                    value: 14373.98,
+                    name: "青海"
+                },
+                {
+                    value: 15906.78,
+                    name: "宁夏"
+                },
+                {
+                    value: 15096.62,
+                    name: "新疆"
+                }
+            ]
+        },
+        {
+            name: "2013",
+            type: "map",
+            mapType: "china",
+            roam: false,
+            mapValueCalculation: "sum",
+            itemStyle: {
+                normal: {
+                    label: {
+                        show: true
+                    }
+                },
+                emphasis: {
+                    label: {
+                        show: true
+                    }
+                }
+            },
+            data: [
+                {
+                    value: 40830.04,
+                    name: "北京"
+                },
+                {
+                    value: 26359.2,
+                    name: "天津"
+                },
+                {
+                    value: 15189.64,
+                    name: "河北"
+                },
+                {
+                    value: 15119.72,
+                    name: "山西"
+                },
+                {
+                    value: 18692.89,
+                    name: "内蒙古"
+                },
+                {
+                    value: 20817.84,
+                    name: "辽宁"
+                },
+                {
+                    value: 15998.12,
+                    name: "吉林"
+                },
+                {
+                    value: 15903.45,
+                    name: "黑龙江"
+                },
+                {
+                    value: 42173.64,
+                    name: "上海"
+                },
+                {
+                    value: 24775.54,
+                    name: "江苏"
+                },
+                {
+                    value: 29774.99,
+                    name: "浙江"
+                },
+                {
+                    value: 15154.31,
+                    name: "安徽"
+                },
+                {
+                    value: 21217.95,
+                    name: "福建"
+                },
+                {
+                    value: 15099.68,
+                    name: "江西"
+                },
+                {
+                    value: 19008.26,
+                    name: "山东"
+                },
+                {
+                    value: 14203.71,
+                    name: "河南"
+                },
+                {
+                    value: 16472.46,
+                    name: "湖北"
+                },
+                {
+                    value: 16004.9,
+                    name: "湖南"
+                },
+                {
+                    value: 23420.75,
+                    name: "广东"
+                },
+                {
+                    value: 14082.3,
+                    name: "广西"
+                },
+                {
+                    value: 15733.28,
+                    name: "海南"
+                },
+                {
+                    value: 16568.67,
+                    name: "重庆"
+                },
+                {
+                    value: 14230.99,
+                    name: "四川"
+                },
+                {
+                    value: 11083.06,
+                    name: "贵州"
+                },
+                {
+                    value: 12577.87,
+                    name: "云南"
+                },
+                {
+                    value: 9740.43,
+                    name: "西藏"
+                },
+                {
+                    value: 14371.55,
+                    name: "陕西"
+                },
+                {
+                    value: 10954.4,
+                    name: "甘肃"
+                },
+                {
+                    value: 12947.84,
+                    name: "青海"
+                },
+                {
+                    value: 14565.78,
+                    name: "宁夏"
+                },
+                {
+                    value: 13669.62,
+                    name: "新疆"
+                }
+            ]
+        }
+    ]
+};
+if (option && typeof option === "object") {
+    myChart.setOption(option, true);
+}
+       </script>
+   </body>
+</html>

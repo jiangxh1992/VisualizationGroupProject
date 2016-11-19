@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html style="height: 100%">
+   <head>
+       <meta charset="utf-8">
+   </head>
+   <body style="height: 100%; margin: 0">
+       <div id="container" style="height: 100%"></div>
+       <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/echarts-all-3.js"></script>
+       <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/extension/dataTool.min.js"></script>
+       <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/map/js/china.js"></script>
+       <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/map/js/world.js"></script>
+       <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=ZUONbpqGBsYGXNIYHicvbAbM"></script>
+       <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/extension/bmap.min.js"></script>
+       <script type="text/javascript">
+var dom = document.getElementById("container");
+var myChart = echarts.init(dom);
+var app = {};
+option = null;
+
+var convertData = function (data) {
+    var res = [];
+    for (var i = 0; i < data.length; i++) {
+        var geoCoord = geoCoordMap[data[i].name];
+        if (geoCoord) {
+            res.push({
+                name: data[i].name,
+                value: geoCoord.concat(data[i].value)
+            });
+        }
+    }
+    return res;
+};
+
+option = {
+     title: {
+        text: "Plastic Usage Change ",
+        subtext: "",
+        x: "center",
+        link: "http://"
+    },
+    tooltip: {
+        trigger: "axis"
+    },
+    legend: {
+        data: ["Beijing", "Shanghai", "Gansu", "Zhejiang", "Heilongjiang"],
+        y: "bottom"
+    },
+    toolbox: {
+        show: false,
+        feature: {
+            mark: {
+                show: true
+            },
+            dataView: {
+                show: true,
+                readOnly: true
+            },
+            magicType: {
+                show: false,
+                type: ["line", "bar"]
+            },
+            restore: {
+                show: true
+            },
+            saveAsImage: {
+                show: true
+            }
+        }
+    },
+    calculable: true,
+    xAxis: [
+        {
+            type: "category",
+            boundaryGap: false,
+            data: ["1995", "1996", "1997", "1998", "1999", "2000", "2001", "2002", "2003", "2004", "2005", "2006", "2007", "2008", "2009", "2010", "2011", "2012", "2013", "2014"],
+            name: "Year"
+        }
+    ],
+    yAxis: [
+        {
+            type: "value",
+            name: "Ton",
+            nameLocation: "end"
+        }
+    ],
+    series: [
+        {
+            name: "Beijing",
+            type: "line",
+            data: [10946, 11596, 9744, 9670, 9113, 9825, 10229, 12456.2, 14419, 9886, 10916, 10919.69, 14615.3, 14199.3, 13054.68, 13539.1, 13268.39, 12549.15, 12356, 10903]
+        },
+        {
+            name: "Shanghai",
+            type: "line",
+            data: [8754, 11431, 7741, 23404, 22188, 21306, 22273, 22460, 22472, 23743, 24414, 22107, 21287, 21280, 20389, 21128.22, 20489, 19300.2, 19436, 19287]
+        },
+        {
+            type: "line",
+            name: "Gansu",
+            data: [26248, 48455, 51465, 57844, 59729, 64233, 69969, 79410, 77200, 77013, 78174, 79189, 84642, 90670, 98483.2, 123712, 143989, 150374, 165791, 176169]
+        },
+        {
+            type: "line",
+            name: "Zhejiang",
+            data: [24678, 24503, 27467, 27811, 28957, 31636, 35361, 39240, 42429, 43615, 44730, 47500, 49150, 52104, 54402, 55426, 58416, 62287, 64663, 65677]
+        },
+        {
+            type: "line",
+            name: "Heilongjiang",
+            data: [39905, 62798, 69907, 53201, 54459, 52878, 51561, 48944, 49884, 51657, 56565, 60025, 63612, 65606, 64567, 69377, 75589, 84590, 85378, 84424]
+        }
+    ]
+};
+if (option && typeof option === "object") {
+    myChart.setOption(option, true);
+}
+       </script>
+   </body>
+</html>
